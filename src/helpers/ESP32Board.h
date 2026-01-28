@@ -14,6 +14,7 @@
 class ESP32Board : public mesh::MainBoard {
 protected:
   uint8_t startup_reason;
+  uint16_t battery_mv_override = 0;
 
 public:
   void begin() {
@@ -101,7 +102,14 @@ public:
   }
 #endif
 
+  void setBattMilliVolts(uint16_t mv) {
+    battery_mv_override = mv;
+  }
+
   uint16_t getBattMilliVolts() override {
+    if (battery_mv_override != 0) {
+      return battery_mv_override;
+    }
   #ifdef PIN_VBAT_READ
     analogReadResolution(12);
 

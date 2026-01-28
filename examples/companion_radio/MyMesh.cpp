@@ -2,6 +2,7 @@
 
 #include <Arduino.h> // needed for PlatformIO
 #include <Mesh.h>
+#include <USB.h>
 
 #define CMD_APP_START                 1
 #define CMD_SEND_TXT_MSG              2
@@ -56,6 +57,9 @@
 #define CMD_SEND_ANON_REQ             57
 #define CMD_SET_AUTOADD_CONFIG        58
 #define CMD_GET_AUTOADD_CONFIG        59
+
+#define CMD_SET_BATTERY              128
+#define CMD_ENABLE_DFU               129
 
 // Stats sub-types for CMD_GET_STATS
 #define STATS_TYPE_CORE               0
@@ -1735,6 +1739,11 @@ void MyMesh::handleCmdFrame(size_t len) {
     out_frame[i++] = RESP_CODE_AUTOADD_CONFIG;
     out_frame[i++] = _prefs.autoadd_config;
     _serial->writeFrame(out_frame, i);
+  } else if (cmd_frame[0] == CMD_SET_BATTERY) {
+    uint16_t mv = *((uint16_t*)&cmd_frame[1]);
+    board.setBattMilliVolts(mv);
+  } else if (cmd_frame[0] == CMD_ENABLE_DFU) {
+    USB.enableDFU();
   } else {
     writeErrFrame(ERR_CODE_UNSUPPORTED_CMD);
     MESH_DEBUG_PRINTLN("ERROR: unknown command: %02X", cmd_frame[0]);

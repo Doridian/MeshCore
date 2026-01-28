@@ -3,25 +3,15 @@
 #define RADIOLIB_STATIC_ONLY 1
 #include <RadioLib.h>
 #include <helpers/radiolib/RadioLibWrappers.h>
-#include <RAK4631Board.h>
+#include <helpers/ESP32Board.h>
 #include <helpers/radiolib/CustomSX1262Wrapper.h>
 #include <helpers/AutoDiscoverRTCClock.h>
-#include <helpers/sensors/EnvironmentSensorManager.h>
+#include <helpers/SensorManager.h>
 
-#ifdef DISPLAY_CLASS
-  #include <helpers/ui/SH1106Display.h>
-  extern DISPLAY_CLASS display;
-  #include <helpers/ui/MomentaryButton.h>
-  extern MomentaryButton user_btn;
-  #if defined(PIN_USER_BTN_ANA)
-  extern MomentaryButton analog_btn;
-  #endif
-#endif
-
-extern RAK4631Board board;
+extern ESP32Board board;
 extern WRAPPER_CLASS radio_driver;
 extern AutoDiscoverRTCClock rtc_clock;
-extern EnvironmentSensorManager sensors;
+extern SensorManager sensors;
 
 bool radio_init();
 uint32_t radio_get_rng_seed();
